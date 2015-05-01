@@ -1,0 +1,17 @@
+[config]
+server_name=mgi-testweb3
+server_arch=linux
+
+collection_types=load,memory,disk,network
+
+load_types=load,uptime,users
+
+memory_types=mem,swap
+
+disk_types=speed,space
+
+disk_volumes=/vol/stuff,/vol/stuff2,/vol/stuff3
+
+network_types=eth0,eth1,eth2
+
+

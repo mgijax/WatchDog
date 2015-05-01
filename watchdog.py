@@ -302,8 +302,7 @@ class Test:
 
 		# execute the command
 
-		p = subprocess.Popen(self.shlexCmd, shell=self.needShell,
-			stdout=subprocess.PIPE)
+		p = subprocess.Popen(self.shlexCmd, shell=self.needShell, stdout=subprocess.PIPE)
 
 		exitCode = p.poll()
 		ct = 0
@@ -347,8 +346,7 @@ class Test:
 
 		self.timeOfNextRun = self.timeOfNextRun + self.frequency
 		if self.timeOfNextRun <= now():
-			msg = 'Frequency (%d seconds) is too small ' + \
-				'for "%s" -- overlapping runs'
+			msg = 'Frequency (%d seconds) is too small for "%s" -- overlapping runs'
 			debug(msg % (self.frequency, self.name))
 
 		return measurements
