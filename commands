@@ -1,0 +1,39 @@
+linux memory:
+
+free
+             total       used       free     shared    buffers     cached
+Mem:      14399656   13988972     410684          0     116408    5351764
+-/+ buffers/cache:    8520800    5878856
+Swap:      2096476     210092    1886384
+
+
+Used: 8520800
+Free: 5878856
+Free Swap: 1886384
+Total: 14399656
+
+solaris memory:
+
+Total: prtconf | grep Memory
+Memory size: 32768 Megabytes
+
+Swap Free:
+Free: vmstat
+  procs     memory            page            disk          faults      cpu
+ r b w   swap  free  re  mf pi po fr de sr m0 m1 m3 m4   in   sy   cs us sy id
+ 0 0 0 22104328 22175776 92 95 577 2 2 0 0  0  0  1  0  281  504  282  2  2 96
+
+swap -s
+total: 5507936k bytes allocated + 2853840k reserved = 8361776k used, 22973720k available
+
+
+Load:
+
+Solaris:
+
+uptime
+  3:13pm  up 486 day(s),  5:34,  29 users,  load average: 0.05, 0.22, 0.47
+
+Linux:
+uptime
+ 15:13pm  up 85 days  4:39,  1 user,  load average: 0.58, 0.71, 0.87

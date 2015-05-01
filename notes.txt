@@ -1,0 +1,16 @@
+Solr records include:
+	server (string)
+	measurement type (string)
+	measurement amount (float)
+	timestamp (float sec.)
+	date/time (string)
+
+each script reports zero or more lines:
+	measurement type (tab) amount
+
+server and timestamp are added by the controller script
+
+measurement scripts require:
+	command-line
+	frequency
+
