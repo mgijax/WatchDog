@@ -62,9 +62,12 @@ class LinuxMem(Command):
 			return []
 class LinuxSwap(Command):
 	def runCommand(self):
-		string = commands.getstatusoutput("free | tail -1 | awk '{ print $2\":\"$3\":\"$4; }'")
-		columns = string[1].split(":")
-		return [
-			Statistic("", "Swap", "Used", columns[1]),
-			Statistic("", "Swap", "Free", columns[2]),
-			Statistic("", "Swap", "Total", columns[0])]
+		try:
+			string = commands.getstatusoutput("free | tail -1 | awk '{ print $2\":\"$3\":\"$4; }'")
+			columns = string[1].split(":")
+			return [
+				Statistic("", "Swap", "Used", columns[1]),
+				Statistic("", "Swap", "Free", columns[2]),
+				Statistic("", "Swap", "Total", int(columns[1]) + int(columns[2]))]
+		except:
+			return []
