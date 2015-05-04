@@ -1,5 +1,7 @@
 from statistic import *
 from abc import ABCMeta, abstractmethod
+import commands
+import re
 
 class Command:
 	__metaclass__ = ABCMeta
@@ -28,29 +30,41 @@ class LinuxNetwork(Command):
 
 class LinuxLoad(Command):
 	def runCommand(self):
+		string = commands.getstatusoutput('uptime')
+		m = re.search('(\d+\.\d+).*(\d+\.\d+).*(\d+\.\d+)', string[1])
 		return [
-			Statistic("", "Load", "1min", "Value"),
-			Statistic("", "Load", "5min", "Value"),
-			Statistic("", "Load", "15min", "Value")]
+			Statistic("", "Load", "1min", m.group(1)),
+			Statistic("", "Load", "5min", m.group(2)),
+			Statistic("", "Load", "15min", m.group(3))]
 
 class LinuxUptime(Command):
 	def runCommand(self):
-		return [Statistic("", "System", "Uptime", "Value")]
+		string = commands.getstatusoutput('uptime')
+		m = re.search('(\d+) day[^\d]+(\d+:\d+)', string[1])
+		return [Statistic("", "System", "Uptime", m.group(1) + ":" + m.group(2))]
 
 class LinuxUsers(Command):
 	def runCommand(self):
-		return [Statistic("", "System", "Users", "Value")]
+		string = commands.getstatusoutput('uptime')
+		m = re.search('(\d+) users', string[1])
+		return [Statistic("", "System", "Users", m.group(1))]
 
 class LinuxMem(Command):
 	def runCommand(self):
-		return [
-			Statistic("", "Memory", "Used", "Value"),
-			Statistic("", "Memory", "Free", "Value"),
-			Statistic("", "Memory", "Total", "Value")]
-
+		try:
+			string = commands.getstatusoutput("free | tail -2 | head -1 | awk '{ print $3\":\"$4; }'")
+			columns = string[1].split(":")
+			return [
+				Statistic("", "Memory", "Used", columns[0]),
+				Statistic("", "Memory", "Free", columns[1]),
+				Statistic("", "Memory", "Total", int(columns[0]) + int(columns[1]))]
+		except:
+			return []
 class LinuxSwap(Command):
 	def runCommand(self):
+		string = commands.getstatusoutput("free | tail -1 | awk '{ print $2\":\"$3\":\"$4; }'")
+		columns = string[1].split(":")
 		return [
-			Statistic("", "Swap", "Used", "Value"),
-			Statistic("", "Swap", "Free", "Value"),
-			Statistic("", "Swap", "Total", "Value")]
+			Statistic("", "Swap", "Used", columns[1]),
+			Statistic("", "Swap", "Free", columns[2]),
+			Statistic("", "Swap", "Total", columns[0])]
