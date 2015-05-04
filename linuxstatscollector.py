@@ -52,8 +52,13 @@ class LinuxStatsCollector(StatsCollector):
 					self.list.append(LinuxDiskSize(volume))
 
 	def setupNetwork(self, network_types):
-		for network in network_types:
-			self.list.append(LinuxNetwork(network))
+		for networkType in network_types:
+			if(networkType == "errors"):
+				for interface in self.config['network_interfaces'].split(','):
+					self.list.append(LinuxNetworkErrors(interface))
+			elif(networkType == "bandwidth"):
+				for interface in self.config['network_interfaces'].split(','):
+					self.list.append(LinuxNetworkBandwidth(interface))
 
 	def runCommands(self):
 		statObjects = []

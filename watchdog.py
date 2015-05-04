@@ -47,18 +47,13 @@ SERVER = socket.gethostname()	# name of this server
 
 ###--- Functions ---###
 
-def now():
-	# returns the current time in seconds since the epoch
-
-	return time.time()
-
 def timestamp(sec = None):
 	# returns 'sec' as a date/time string, where 'sec' is the number of
 	# seconds since the epoch.  If 'sec' is None, the current date/time is
 	# returned.
 
 	if not sec:
-		sec = now()
+		sec = time.time()
 	return time.strftime('%m/%d/%Y %H:%M:%S', time.localtime(sec))
 
 def debug(s):
@@ -164,7 +159,7 @@ def logMeasurements(measurements):
 	# record this set of measurements in Solr (or write to stderr, if we
 	# are running in debug mode
 
-	seconds = now()
+	seconds = time.time()
 	datetime = timestamp(seconds)
 
 	names = measurements.keys()
@@ -192,10 +187,10 @@ def main():
 	nextTime = nextTest.getTimeOfNextRun()
 
 	# shouldn't be an initial wait, but just in case...
-	if nextTime > now():
-		time.sleep(now() - nextTime)
+	if nextTime > time.time()
+		time.sleep(time.time() - nextTime)
 				
-	while (nextTime <= now()):
+	while (nextTime <= time.time()):
 		measurements = nextTest.run()
 
 		if measurements:
@@ -214,7 +209,7 @@ def main():
 		nextTest = TESTS[0]
 		nextTime = nextTest.getTimeOfNextRun()
 
-		delay = nextTime - now()
+		delay = nextTime - time.time()
 		if delay > 0:
 			time.sleep(delay)
 				
@@ -274,21 +269,7 @@ class Test:
 		self.retries = MAX_WAIT / RESOLUTION
 		return
 
-	def getName(self):
-		# accessor for 'name' property
-		return self.name
 
-	def getCommand(self):
-		# accessor for the 'cmd' property
-		return self.cmd
-
-	def getDescription(self):
-		# accessor for the 'description' property
-		return self.description
-
-	def getFrequency(self):
-		# accessor for the 'frequency' property
-		return self.frequency
 
 	def getTimeOfNextRun(self):
 		# get the time (in seconds) of when the next run should occur
@@ -345,7 +326,7 @@ class Test:
 		# the delay between runs is too small
 
 		self.timeOfNextRun = self.timeOfNextRun + self.frequency
-		if self.timeOfNextRun <= now():
+		if self.timeOfNextRun <= time.time():
 			msg = 'Frequency (%d seconds) is too small for "%s" -- overlapping runs'
 			debug(msg % (self.frequency, self.name))
 

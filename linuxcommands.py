@@ -22,11 +22,17 @@ class LinuxDiskSize(Command):
 	def runCommand(self):
 		return [Statistic("", "DiskSize", self.volume, "Value")]
 
-class LinuxNetwork(Command):
-	def __init__(self, network):
-		self.network = network
+class LinuxNetworkErrors(Command):
+	def __init__(self, interface):
+		self.interface = interface
 	def runCommand(self):
-		return [Statistic("", "Network", self.network, "Value")]
+		return [Statistic("", "NetworkErrors", self.interface, "Value")]
+
+class LinuxNetworkBandwidth(Command):
+	def __init__(self, interface):
+		self.interface = interface
+	def runCommand(self):
+		return [Statistic("", "NetworkBandwidth", self.interface, "Value")]
 
 class LinuxLoad(Command):
 	def runCommand(self):
