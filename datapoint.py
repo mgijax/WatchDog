@@ -1,4 +1,4 @@
-class Statistic:
+class DataPoint:
 	def __init__(self, server_name, data_type, data_name, data_value):
 		self.server_name = server_name
 		self.data_type = data_type

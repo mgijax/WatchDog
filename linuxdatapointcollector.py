@@ -1,7 +1,7 @@
 from linuxcommands import *
-from statscollector import StatsCollector
+from datapointcollector import DataPointCollector
 
-class LinuxStatsCollector(StatsCollector):
+class LinuxDataPointCollector(DataPointCollector):
 
 	def __init__(self, config):
 		self.list = []
@@ -29,41 +29,41 @@ class LinuxStatsCollector(StatsCollector):
 	def setupLoad(self, loadTypes):
 		for loadType in loadTypes:
 			if(loadType == "load"):
-				self.list.append(LinuxLoad())
+				self.list.append(LinuxLoad(self.config['load_freq']))
 			elif(loadType == "uptime"):
-				self.list.append(LinuxUptime())
+				self.list.append(LinuxUptime(self.config['uptime_freq']))
 			elif(loadType == "users"):
-				self.list.append(LinuxUsers())
+				self.list.append(LinuxUsers(self.config['users_freq']))
 
 	def setupMemory(self, memoryTypes):
 		for memoryType in memoryTypes:
 			if(memoryType == "mem"):
-				self.list.append(LinuxMem())
+				self.list.append(LinuxMem(self.config['mem_freq']))
 			elif(memoryType == "swap"):
-				self.list.append(LinuxSwap())
+				self.list.append(LinuxSwap(self.config['swap_freq']))
 
 	def setupDisk(self, disk_types):
 		for diskType in disk_types:
 			if(diskType == "speed"):
 				for volume in self.config['disk_volumes'].split(','):
-					self.list.append(LinuxDiskSpeed(volume))
+					self.list.append(LinuxDiskSpeed(volume, self.config['speed_freq']))
 			elif(diskType == "size"):
 				for volume in self.config['disk_volumes'].split(','):
-					self.list.append(LinuxDiskSize(volume))
+					self.list.append(LinuxDiskSize(volume, self.config['size_freq']))
 
 	def setupNetwork(self, network_types):
 		for networkType in network_types:
 			if(networkType == "errors"):
 				for interface in self.config['network_interfaces'].split(','):
-					self.list.append(LinuxNetworkErrors(interface))
+					self.list.append(LinuxNetworkErrors(interface, self.config['errors_freq']))
 			elif(networkType == "bandwidth"):
 				for interface in self.config['network_interfaces'].split(','):
-					self.list.append(LinuxNetworkBandwidth(interface))
+					self.list.append(LinuxNetworkBandwidth(interface, self.config['bandwidth_freq']))
 
 	def runCommands(self):
-		statObjects = []
+		dataPointObjects = []
 		for command in self.list:
-			statObjects.extend(command.runCommand())
-		for stat in statObjects:
-			stat.server_name = self.serverName
-		print statObjects
+			dataPointObjects.extend(command.runCommand())
+		for dp in dataPointObjects:
+			dp.server_name = self.serverName
+		return dataPointObjects

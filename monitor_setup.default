@@ -16,10 +16,10 @@ memory_types=mem,swap
 mem_freq=60
 swap_freq=60
 
-disk_types=speed,space
+disk_types=speed,size
 disk_volumes=/vol/stuff,/vol/stuff2,/vol/stuff3
 speed_freq=60
-space_freq=60
+size_freq=60
 
 network_types=errors,bandwidth
 network_interfaces=eth0,eth1,eth2

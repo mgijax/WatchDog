@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-class StatsCollector:
+class DataPointCollector:
 	__metaclass__ = ABCMeta
 
 	@abstractmethod
