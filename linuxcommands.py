@@ -120,7 +120,7 @@ class LinuxUsers(Command):
 	def runCommand(self):
 		if self.timeToRun():
 			string = commands.getstatusoutput('uptime')
-			m = re.search('(\d+) users', string[1])
+			m = re.search('(\d+) user', string[1])
 			return [DataPoint("System", "Users", m.group(1))]
 		else:
 			return []
