@@ -7,62 +7,38 @@ class DataPointCollector():
 		self.serverName = config['server_name']
 		self.arch = config['server_arch']
 		self.config = config
+		self.classobjects = {
+			'system_load': Load,
+			'system_uptime': Uptime,
+			'system_users': Users,
+			'memory_ram': MemoryRam,
+			'memory_swap': MemorySwap,
+			'disk_speed': DiskSpeed,
+			'disk_size': DiskSize,
+			'network_errors': NetworkErrors,
+			'network_drops': NetworkDrops,
+			'network_bandwidth': NetworkBandwidth
+		}
 		self.setupCollectionTypes(self.config['collection_types'].split(','))
 
 	def setupCollectionTypes(self, typeList):
 		for collectionType in typeList:
-			self.setupType(collectionType)
-
-	def setupType(self, type):
-		if(type == "system"):
-			self.setupSystem(self.config['system_types'].split(','))
-		elif(type == "memory"):
-			self.setupMemory(self.config['memory_types'].split(','))
-		elif(type == "disk"):
-			self.setupDisk(self.config['disk_types'].split(','))
-		elif(type == "network"):
-			self.setupNetwork(self.config['network_types'].split(','))
-		else:
-			print "Unknown Collection Type: %s" % type
-
-	def setupSystem(self, systemTypes):
-		for systemType in systemTypes:
-			if(systemType == "system_load"):
-				self.list.append(Load(self.arch, self.config['system_load_freq']))
-			elif(systemType == "system_uptime"):
-				self.list.append(Uptime(self.arch, self.config['system_uptime_freq']))
-			elif(systemType == "system_users"):
-				self.list.append(Users(self.arch, self.config['system_users_freq']))
+			if(collectionType== "system"):
+				for systemType in self.config['system_types'].split(','):
+					self.list.append(self.classobjects[systemType](self.arch, self.config[systemType + "_freq"]))
+			elif(collectionType == "memory"):
+				for memoryType in self.config['memory_types'].split(','):
+					self.list.append(self.classobjects[memoryType](self.arch, self.config[memoryType + "_freq"]))
+			elif(collectionType == "disk"):
+				for diskType in self.config['disk_types'].split(','):
+					for volume in self.config['disk_volumes'].split(','):
+						self.list.append(self.classobjects[diskType](self.arch, self.config[diskType + "_freq"], volume))
+			elif(collectionType == "network"):
+				for networkType in self.config['network_types'].split(','):
+					for interface in self.config['network_interfaces'].split(','):
+						self.list.append(self.classobjects[networkType](self.arch, self.config[networkType + "_freq"], interface))
 			else:
-				print "Unknown System Type: %s" % systemType
-
-	def setupMemory(self, memoryTypes):
-		for memoryType in memoryTypes:
-			if(memoryType == "mem"):
-				self.list.append(Mem(self.arch, self.config['mem_freq']))
-			elif(memoryType == "swap"):
-				self.list.append(Swap(self.arch, self.config['swap_freq']))
-
-	def setupDisk(self, disk_types):
-		for diskType in disk_types:
-			if(diskType == "disk_speed"):
-				for volume in self.config['disk_volumes'].split(','):
-					self.list.append(DiskSpeed(self.arch, self.config['disk_speed_freq'], volume))
-			elif(diskType == "disk_size"):
-				for volume in self.config['disk_volumes'].split(','):
-					self.list.append(DiskSize(self.arch, self.config['disk_size_freq'], volume))
-
-	def setupNetwork(self, network_types):
-		for networkType in network_types:
-			if(networkType == "network_errors"):
-				for interface in self.config['network_interfaces'].split(','):
-					self.list.append(NetworkErrors(self.arch, self.config['network_errors_freq'], interface))
-			elif(networkType == "network_drops"):
-				for interface in self.config['network_interfaces'].split(','):
-					self.list.append(NetworkDrops(self.arch, self.config['network_drops_freq'], interface))
-			elif(networkType == "network_bandwidth"):
-				for interface in self.config['network_interfaces'].split(','):
-					self.list.append(NetworkBandwidth(self.arch, self.config['network_bandwidth_freq'], interface))
+				print "Unknown Collection Type: %s" % collectionType
 
 	def runCommands(self):
 		dataPointObjects = []

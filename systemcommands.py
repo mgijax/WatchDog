@@ -103,7 +103,7 @@ class Users(Command):
 		m = re.search('(\d+) user', string[1])
 		return [DataPoint("System", "Users", m.group(1))]
 
-class Mem(Command):
+class MemoryRam(Command):
 	def __init__(self, arch, freq):
 		Command.__init__(self, arch, freq)
 
@@ -112,13 +112,13 @@ class Mem(Command):
 			string = commands.getstatusoutput("free | tail -2 | head -1 | awk '{ print $3\":\"$4; }'")
 			columns = string[1].split(":")
 			return [
-				DataPoint("Memory", "Used", columns[0]),
-				DataPoint("Memory", "Free", columns[1]),
-				DataPoint("Memory", "Total", int(columns[0]) + int(columns[1]))]
+				DataPoint("MemoryRam", "Used", columns[0]),
+				DataPoint("MemoryRam", "Free", columns[1]),
+				DataPoint("MemoryRam", "Total", int(columns[0]) + int(columns[1]))]
 		except:
 			return []
 
-class Swap(Command):
+class MemorySwap(Command):
 
 	def __init__(self, arch, freq):
 		Command.__init__(self, arch, freq)
@@ -128,8 +128,8 @@ class Swap(Command):
 			string = commands.getstatusoutput("free | tail -1 | awk '{ print $2\":\"$3\":\"$4; }'")
 			columns = string[1].split(":")
 			return [
-				DataPoint("Swap", "Used", columns[1]),
-				DataPoint("Swap", "Free", columns[2]),
-				DataPoint("Swap", "Total", int(columns[1]) + int(columns[2]))]
+				DataPoint("MemroySwap", "Used", columns[1]),
+				DataPoint("MemorySwap", "Free", columns[2]),
+				DataPoint("MemorySwap", "Total", int(columns[1]) + int(columns[2]))]
 		except:
 			return []
