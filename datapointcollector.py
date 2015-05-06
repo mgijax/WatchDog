@@ -16,7 +16,6 @@ class DataPointCollector():
 			'disk_speed': DiskSpeed,
 			'disk_size': DiskSize,
 			'network_errors': NetworkErrors,
-			'network_drops': NetworkDrops,
 			'network_bandwidth': NetworkBandwidth
 		}
 		self.setupCollectionTypes(self.config['collection_types'].split(','))

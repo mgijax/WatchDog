@@ -10,6 +10,7 @@ class Command:
 
 	def __init__(self, arch, freq):
 		self.arch = arch
+		print "Running: %s" % self
 		try:
 			self.freq = int(freq)
 		except:
@@ -64,16 +65,12 @@ class NetworkErrors(Command):
 		self.interface = interface
 
 	def run(self):
-		return [DataPoint("NetworkErrors", self.interface, "Value")]
+		if self.arch == "linux":
+			return [DataPoint("NetworkErrors", self.interface, "Value")]
+			#return [DataPoint("NetworkDrops", self.interface, "Value")]
+		else:
+			return []
 
-class NetworkDrops(Command):
-
-	def __init__(self, arch, freq, interface):
-		Command.__init__(self, arch, freq)
-		self.interface = interface
-
-	def run(self):
-		return [DataPoint("NetworkDrops", self.interface, "Value")]
 
 class NetworkBandwidth(Command):
 
@@ -82,7 +79,19 @@ class NetworkBandwidth(Command):
 		self.interface = interface
 
 	def run(self):
-		return [DataPoint("NetworkBandwidth", self.interface, "Value")]
+		if self.arch == "linux":
+			string0 = commands.getstatusoutput("cat /sys/class/net/" + self.interface + "/rx_bytes")
+			string1 = commands.getstatusoutput("cat /sys/class/net/" + self.interface + "/tx_bytes")
+			return [
+				DataPoint("NetworkPacketsIn", self.interface, "Value"),
+				DataPoint("NetworkPacketsOut", self.interface, "Value"),
+				DataPoint("NetworkBytesIn", self.interface, string0[1]),
+				DataPoint("NetworkBytesOut", self.interface, string1[1]),
+				DataPoint("NetworkBytesIn", self.interface, "Value"),
+				DataPoint("NetworkBytesOut", self.interface, "Value"),
+			]
+		else:
+			return []
 
 class Load(Command):
 
@@ -90,12 +99,13 @@ class Load(Command):
 		Command.__init__(self, arch, freq)
 
 	def run(self):
-		string = commands.getstatusoutput("uptime")
-		m = re.search('(\d+\.\d+).*(\d+\.\d+).*(\d+\.\d+)', string[1])
-		return [
-			DataPoint("SystemLoad", "1min", m.group(1)),
-			DataPoint("SystemLoad", "5min", m.group(2)),
-			DataPoint("SystemLoad", "15min", m.group(3))]
+			string = commands.getstatusoutput("uptime")
+			m = re.search('(\d+\.\d+).*(\d+\.\d+).*(\d+\.\d+)', string[1])
+			return [
+				DataPoint("SystemLoad", "1min", m.group(1)),
+				DataPoint("SystemLoad", "5min", m.group(2)),
+				DataPoint("SystemLoad", "15min", m.group(3))]
+
 
 class Uptime(Command):
 
@@ -104,7 +114,7 @@ class Uptime(Command):
 
 	def run(self):
 		string = commands.getstatusoutput("uptime")
-		m = re.search('(\d+) day[^\d]+(\d+:\d+)', string[1])
+		m = re.search('(\d+) day[^\d]+(\d+:?\d+)', string[1])
 		return [DataPoint("System", "Uptime", m.group(1) + ":" + m.group(2))]
 
 class Users(Command):
