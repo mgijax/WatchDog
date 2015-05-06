@@ -29,9 +29,11 @@ class Command:
 
 # Produces a number that is Meg / Second
 class DiskSpeed(Command):
+
 	def __init__(self, arch, freq, volume):
 		Command.__init__(self, arch, freq)
 		self.volume = volume
+
 	def run(self):
 		start = time.time()
 		string = commands.getstatusoutput("dd bs=10240 count=10240 if=/dev/zero of=" + self.volume)
@@ -41,9 +43,11 @@ class DiskSpeed(Command):
 		return [DataPoint("DiskSpeed", self.volume, str(int(300 / (end - start))))]
 
 class DiskSize(Command):
+
 	def __init__(self, arch, freq, volume):
 		Command.__init__(self, arch, freq)
 		self.volume = volume
+
 	def run(self):
 		string = commands.getstatusoutput("df -Ph " + self.volume + " | tail -1 | awk '{print $1\"->\"$6}'")
 		string2 = commands.getstatusoutput("df -Ph " + self.volume + " | tail -1 | awk '{print $2\":\"$3\":\"$4}'")
@@ -54,29 +58,37 @@ class DiskSize(Command):
 			DataPoint("DiskTotal", self.volume, columns[0])]
 
 class NetworkErrors(Command):
+
 	def __init__(self, arch, freq, interface):
 		Command.__init__(self, arch, freq)
 		self.interface = interface
+
 	def run(self):
 		return [DataPoint("NetworkErrors", self.interface, "Value")]
 
 class NetworkDrops(Command):
+
 	def __init__(self, arch, freq, interface):
 		Command.__init__(self, arch, freq)
 		self.interface = interface
+
 	def run(self):
 		return [DataPoint("NetworkDrops", self.interface, "Value")]
 
 class NetworkBandwidth(Command):
+
 	def __init__(self, arch, freq, interface):
 		Command.__init__(self, arch, freq)
 		self.interface = interface
+
 	def run(self):
 		return [DataPoint("NetworkBandwidth", self.interface, "Value")]
 
 class Load(Command):
+
 	def __init__(self, arch, freq):
 		Command.__init__(self, arch, freq)
+
 	def run(self):
 		string = commands.getstatusoutput("uptime")
 		m = re.search('(\d+\.\d+).*(\d+\.\d+).*(\d+\.\d+)', string[1])
@@ -86,6 +98,7 @@ class Load(Command):
 			DataPoint("SystemLoad", "15min", m.group(3))]
 
 class Uptime(Command):
+
 	def __init__(self, arch, freq):
 		Command.__init__(self, arch, freq)
 
@@ -95,6 +108,7 @@ class Uptime(Command):
 		return [DataPoint("System", "Uptime", m.group(1) + ":" + m.group(2))]
 
 class Users(Command):
+
 	def __init__(self, arch, freq):
 		Command.__init__(self, arch, freq)
 
@@ -104,6 +118,7 @@ class Users(Command):
 		return [DataPoint("System", "Users", m.group(1))]
 
 class MemoryRam(Command):
+
 	def __init__(self, arch, freq):
 		Command.__init__(self, arch, freq)
 

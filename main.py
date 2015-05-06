@@ -25,5 +25,5 @@ if __name__ == '__main__':
 		points = collector.runCommands()
 		for point in points:
 			print point.json()
-			#restclient.senddatapoint(point.json())
-		#time.sleep(1)
+			restclient.senddatapoint(point.json())
+		time.sleep(1)
