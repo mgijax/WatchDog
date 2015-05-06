@@ -1,17 +1,3 @@
-linux memory:
-
-free
-             total       used       free     shared    buffers     cached
-Mem:      14399656   13988972     410684          0     116408    5351764
--/+ buffers/cache:    8520800    5878856
-Swap:      2096476     210092    1886384
-
-
-Used: 8520800
-Free: 5878856
-Free Swap: 1886384
-Total: 14399656
-
 solaris memory:
 
 Total: prtconf | grep Memory
