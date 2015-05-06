@@ -2,7 +2,7 @@
 
 import ConfigParser, os
 from restclient import *
-from linuxdatapointcollector import LinuxDataPointCollector
+from datapointcollector import DataPointCollector
 import time
 
 if __name__ == '__main__':
@@ -17,12 +17,13 @@ if __name__ == '__main__':
 			dictionary[section][option] = config.get(section, option)
 
 	cfg = dictionary['config']
-	restclient = RestClient(cfg['collector_server_name'], cfg['collector_server_port'])
-	collector = LinuxDataPointCollector(cfg)
+
+	restclient = RestClient(cfg)
+	collector = DataPointCollector(cfg)
 
 	while True:
 		points = collector.runCommands()
 		for point in points:
 			print point.json()
-			restclient.senddatapoint(point.json())
-		time.sleep(1)
+			#restclient.senddatapoint(point.json())
+		#time.sleep(1)

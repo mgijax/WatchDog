@@ -2,9 +2,9 @@ import json,httplib
 
 class RestClient:
 
-	def __init__(self, restserver, restport):
-		self.restserver = restserver
-		self.restport = restport
+	def __init__(self, config):
+		self.restserver = config['collector_server_name']
+		self.restport = config['collector_server_port']
 		self.baseurl = "/rest"
 
 	def senddatapoint(self, json_string):
