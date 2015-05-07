@@ -8,9 +8,12 @@ class RestClient:
 		self.baseurl = "/rest"
 
 	def senddatapoint(self, json_string):
-		endpoint = "/datapoint"
-		connection = httplib.HTTPConnection(self.restserver, self.restport)
-		connection.connect()
-		connection.request('POST', self.baseurl + endpoint, json_string, {"Content-Type": "application/json"})
-		result = connection.getresponse().read()
-		return result
+		try:
+			endpoint = "/datapoint"
+			connection = httplib.HTTPConnection(self.restserver, self.restport)
+			connection.connect()
+			connection.request('POST', self.baseurl + endpoint, json_string, {"Content-Type": "application/json"})
+			result = connection.getresponse().read()
+			return result
+		except:
+			print "Connection to: " + self.restserver + ":" + self.restport + " failed will try again next time"
