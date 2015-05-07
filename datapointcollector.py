@@ -1,6 +1,6 @@
 from systemcommands import *
 
-class DataPointCollector():
+class DataPointCollector:
 
 	def __init__(self, config):
 		self.list = []

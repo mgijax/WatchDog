@@ -1,4 +1,4 @@
-import json,httplib
+import httplib
 
 class RestClient:
 
@@ -11,6 +11,6 @@ class RestClient:
 		endpoint = "/datapoint"
 		connection = httplib.HTTPConnection(self.restserver, self.restport)
 		connection.connect()
-		connection.request('POST', self.baseurl + endpoint, json.dumps(json.loads(json_string)), {"Content-Type": "application/json"})
+		connection.request('POST', self.baseurl + endpoint, json_string, {"Content-Type": "application/json"})
 		result = connection.getresponse().read()
 		return result
