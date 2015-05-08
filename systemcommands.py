@@ -35,10 +35,12 @@ class DiskSpeed(Command):
 
 	def run(self):
 		start = time.time()
+		commands.getstatusoutput("touch " + self.volume)
 		string1 = commands.getstatusoutput("df -Ph " + self.volume + " | tail -1 | awk '{print $1\"->\"$6}'")
 		string = commands.getstatusoutput("dd bs=10240 count=10240 if=/dev/zero of=" + self.volume)
 		string = commands.getstatusoutput("dd bs=10240 count=10240 if=/dev/zero of=" + self.volume)
 		string = commands.getstatusoutput("dd bs=10240 count=10240 if=/dev/zero of=" + self.volume)
+		commands.getstatusoutput("rm " + self.volume)
 		end = time.time()
 		return [DataPoint("Disk", string1[1], "Speed", str(int(300 / (end - start))))]
 
@@ -49,8 +51,10 @@ class DiskSize(Command):
 		self.volume = volume
 
 	def run(self):
+		commands.getstatusoutput("touch " + self.volume)
 		string = commands.getstatusoutput("df -Ph " + self.volume + " | tail -1 | awk '{print $1\"->\"$6}'")
 		string2 = commands.getstatusoutput("df -Ph " + self.volume + " | tail -1 | awk '{print $2\":\"$3\":\"$4}'")
+		commands.getstatusoutput("rm " + self.volume)
 		columns = string2[1].split(":")
 		return [
 			DataPoint("Disk", string[1], "Used", columns[1]),
