@@ -117,7 +117,7 @@ class NetworkBandwidth(Command):
 			DataPoint("Network", self.interface, "PacketsOut", string3[1])
 		]
 
-class Load(Command):
+class SystemLoad(Command):
 
 	def __init__(self, arch, freq):
 		Command.__init__(self, arch, freq)
@@ -130,7 +130,7 @@ class Load(Command):
 			DataPoint("System", "Load", "5min", m.group(2)),
 			DataPoint("System", "Load", "15min", m.group(3))]
 
-class Uptime(Command):
+class SystemUptime(Command):
 
 	def __init__(self, arch, freq):
 		Command.__init__(self, arch, freq)
@@ -140,7 +140,7 @@ class Uptime(Command):
 		m = re.search('(\d+) day[^\d]+(\d+:?\d+)', string[1])
 		return [DataPoint("System", "Uptime", "Uptime", m.group(1) + ":" + m.group(2))]
 
-class Users(Command):
+class SystemUsers(Command):
 
 	def __init__(self, arch, freq):
 		Command.__init__(self, arch, freq)

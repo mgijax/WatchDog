@@ -8,9 +8,9 @@ class DataPointCollector:
 		self.arch = config['server_arch']
 		self.config = config
 		self.classobjects = {
-			'system_load': Load,
-			'system_uptime': Uptime,
-			'system_users': Users,
+			'system_load': SystemLoad,
+			'system_uptime': SystemUptime,
+			'system_users': SystemUsers,
 			'memory_ram': MemoryRam,
 			'memory_swap': MemorySwap,
 			'disk_speed': DiskSpeed,
