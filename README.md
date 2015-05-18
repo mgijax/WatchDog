@@ -7,11 +7,13 @@ Data Collector sets up the classes based on the config in the config file. These
 
 ## Installation
 
-git clone 
+git clone git@github.com:mgijax/WatchDog.git
 
 ## Config
 
 Configuration out of the box only needs a few changes.
+
+>cp host_setup_default.cfg host_setup.cfg
 
 > collector_server_name=localhost.jax.org
 > collector_server_port=80
