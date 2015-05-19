@@ -1,5 +1,9 @@
 import httplib
 
+# This class is used to make a connection to the monitoring server
+# it will send a json string to a specific endpoint currently hardcoded
+# the server will take the data so long as it is well formated and all
+# the fields are populated and return a 200
 class RestClient:
 
 	def __init__(self, config):

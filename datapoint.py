@@ -1,3 +1,6 @@
+# This class is used to hold the data that will be sent
+# to the monitoring server for collection. Several methods
+# are defined in order to represent the data in different ways.
 class DataPoint:
 	def __init__(self, data_type, data_name, data_prop, data_value):
 		self.data_type = data_type

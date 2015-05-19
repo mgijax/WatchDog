@@ -5,6 +5,10 @@ from restclient import *
 from datapointcollector import DataPointCollector
 import time
 
+# This file setups all the collectors
+# Then runs all the collectors (commands)
+# Then reports all the datapoints to the
+# monitoring server.
 if __name__ == '__main__':
 
 	config = ConfigParser.ConfigParser()

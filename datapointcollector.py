@@ -1,11 +1,15 @@
 from systemcommands import *
 
+# This class reads in the config file and setups all the classes
+# that are going to run based on what is found in the config file
+# also the config file dictates how often those classes will be
+# run. If no entry is found then it just defaults to 60 seconds
 class DataPointCollector:
 
 	def __init__(self, config):
 		self.list = []
-		self.serverName = config['server_name']
-		self.arch = config['server_arch']
+		self.serverName = config['client_name']
+		self.arch = config['client_arch']
 		self.config = config
 		self.classobjects = {
 			'system_load': SystemLoad,

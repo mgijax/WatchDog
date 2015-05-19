@@ -27,6 +27,11 @@ class Command:
 	def run(self):
 		raise NotImplementedError()
 
+# This class is used to write data to disk
+# It writes 3 2M files to the file system
+# and records the time it takes then does
+# the calculation to determine what the
+# MB/s would be
 class DiskSpeed(Command):
 
 	def __init__(self, arch, freq, volume):
@@ -44,6 +49,10 @@ class DiskSpeed(Command):
 		end = time.time()
 		return [DataPoint("Disk", string1[1], "Speed", str(int(6 / (end - start))))]
 
+# This class gets the mount file system from the file
+# that is passed in. It takes the Used, Available and
+# Total from the file system and returns it as a data
+# point that will be sent to the monitoring server.
 class DiskSize(Command):
 
 	def __init__(self, arch, freq, volume):
@@ -61,6 +70,9 @@ class DiskSize(Command):
 			DataPoint("Disk", string[1], "Available", columns[2]),
 			DataPoint("Disk", string[1], "Total", columns[0])]
 
+# This class is used to detect any network error that might
+# have occured on a network interface. It tried to determine
+# the number of drops and errors per interface card.
 class NetworkErrors(Command):
 
 	def __init__(self, arch, freq, interface):
@@ -91,6 +103,9 @@ class NetworkErrors(Command):
 			DataPoint("Network", self.interface, "Drops", drops)
 		]
 
+# This class is used to get the bandwidth statsistics from a
+# network interface. It will grab the number of packets, and
+# bytes transmitted and recieved on a interface.
 class NetworkBandwidth(Command):
 
 	def __init__(self, arch, freq, interface):
@@ -117,6 +132,9 @@ class NetworkBandwidth(Command):
 			DataPoint("Network", self.interface, "PacketsOut", string3[1])
 		]
 
+# This class is used to retrieve the system load from the
+# server. It will return the 1 minute, 5 minute and 15 minute
+# load averages that would normally be seen via top or ps
 class SystemLoad(Command):
 
 	def __init__(self, arch, freq):
@@ -130,6 +148,9 @@ class SystemLoad(Command):
 			DataPoint("System", "Load", "5min", m.group(2)),
 			DataPoint("System", "Load", "15min", m.group(3))]
 
+# This class is used to retrieve the uptime that the server has
+# This is done by running the uptime command and does simple
+# parsing to get the uptime in the a format of dd:hh:mm
 class SystemUptime(Command):
 
 	def __init__(self, arch, freq):
@@ -140,6 +161,8 @@ class SystemUptime(Command):
 		m = re.search('(\d+) day[^\d]+(\d+:?\d+)', string[1])
 		return [DataPoint("System", "Uptime", "Uptime", m.group(1) + ":" + m.group(2))]
 
+# This class is used to retrieve the number of users that are
+# logged into the system at any one given time.
 class SystemUsers(Command):
 
 	def __init__(self, arch, freq):
@@ -150,6 +173,8 @@ class SystemUsers(Command):
 		m = re.search('(\d+) user', string[1])
 		return [DataPoint("System", "Users", "Users", m.group(1))]
 
+# This class is used to get the amount of free, used, and total
+# RAM that a server has. 
 class MemoryRam(Command):
 
 	def __init__(self, arch, freq):
@@ -174,6 +199,8 @@ class MemoryRam(Command):
 			DataPoint("Memory", "Ram", "Free", free),
 			DataPoint("Memory", "Ram", "Total", total)]
 
+# This class is used to get the amount of free, used, and total
+# Swap space that a server has. 
 class MemorySwap(Command):
 
 	def __init__(self, arch, freq):
