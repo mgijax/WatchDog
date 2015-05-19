@@ -8,7 +8,9 @@ import time
 # This file setups all the collectors
 # Then runs all the collectors (commands)
 # Then reports all the datapoints to the
-# monitoring server.
+# monitoring server. Refer to the github
+# page for more information on running
+# this client.
 if __name__ == '__main__':
 
 	config = ConfigParser.ConfigParser()
