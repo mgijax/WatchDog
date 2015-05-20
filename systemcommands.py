@@ -13,15 +13,26 @@ class Command:
 		except:
 			self.freq = 60
 
+	def setDebug(self, debug):
+		self.debug = debug
+
 	def runCommand(self):
 		timeToRun = self.lastRuntime <= (time.time() - self.freq)
 		if timeToRun:
 			self.lastRuntime = time.time()
 			try:
-				return self.run()
-			except:
+				if self.debug: print "Running " + self.__class__.__name__ + " Command"
+				ret = self.run()
+				if self.debug: print "Finished running " + self.__class__.__name__ + " Command"
+				if self.debug: print
+				return ret
+			except Exception as e:
+				if self.debug: print "Error: " + str(e)
+				if self.debug: print "Finished running " + self.__class__.__name__ + " Command"
+				if self.debug: print
 				return []
 		else:
+			if self.debug: print self.__class__.__name__ + " is sleeping for " + str(int(60 - (time.time() - self.lastRuntime))) + " more seconds"
 			return []
 
 	def run(self):
@@ -40,11 +51,17 @@ class DiskSpeed(Command):
 
 	def run(self):
 		start = time.time()
+		if self.debug: print "touch " + self.volume
 		commands.getstatusoutput("touch " + self.volume)
+		if self.debug: print "df -Ph " + self.volume + " | tail -1 | awk '{print $1\"->\"$6}'"
 		string1 = commands.getstatusoutput("df -Ph " + self.volume + " | tail -1 | awk '{print $1\"->\"$6}'")
+		if self.debug: print "dd bs=2048 count=1 if=/dev/zero of=" + self.volume
 		string = commands.getstatusoutput("dd bs=2048 count=1 if=/dev/zero of=" + self.volume)
+		if self.debug: print "dd bs=2048 count=1 if=/dev/zero of=" + self.volume
 		string = commands.getstatusoutput("dd bs=2048 count=1 if=/dev/zero of=" + self.volume)
+		if self.debug: print "dd bs=2048 count=1 if=/dev/zero of=" + self.volume
 		string = commands.getstatusoutput("dd bs=2048 count=1 if=/dev/zero of=" + self.volume)
+		if self.debug: print "rm " + self.volume
 		commands.getstatusoutput("rm " + self.volume)
 		end = time.time()
 		return [DataPoint("Disk", string1[1], "Speed", str(int(6 / (end - start))))]
@@ -60,9 +77,13 @@ class DiskSize(Command):
 		self.volume = volume
 
 	def run(self):
+		if self.debug: print "touch " + self.volume
 		commands.getstatusoutput("touch " + self.volume)
+		if self.debug: print "df -Ph " + self.volume + " | tail -1 | awk '{print $1\"->\"$6}'"
 		string = commands.getstatusoutput("df -Ph " + self.volume + " | tail -1 | awk '{print $1\"->\"$6}'")
+		if self.debug: print "df -Ph " + self.volume + " | tail -1 | awk '{print $2\":\"$3\":\"$4}'"
 		string2 = commands.getstatusoutput("df -Ph " + self.volume + " | tail -1 | awk '{print $2\":\"$3\":\"$4}'")
+		if self.debug: print "rm " + self.volume
 		commands.getstatusoutput("rm " + self.volume)
 		columns = string2[1].split(":")
 		return [
@@ -81,8 +102,10 @@ class NetworkErrors(Command):
 
 	def run(self):
 		if self.arch == "linux":
+			if self.debug: print "Linux: cat /sys/class/net/" + self.interface + "/statistics/*_errors"
 			string0 = commands.getstatusoutput("cat /sys/class/net/" + self.interface + "/statistics/*_errors")
 		if self.arch == "solaris":
+			if self.debug: print "Solaris: kstat -p -c net -n " + self.interface + " | grep err | awk '{print $2}'"
 			string0 = commands.getstatusoutput("kstat -p -c net -n " + self.interface + " | grep err | awk '{print $2}'")
 
 		errors = 0
@@ -90,8 +113,10 @@ class NetworkErrors(Command):
 			errors += int(error)
 
 		if self.arch == "linux":
+			if self.debug: print "Linux: cat /sys/class/net/" + self.interface + "/statistics/*_dropped"
 			string1 = commands.getstatusoutput("cat /sys/class/net/" + self.interface + "/statistics/*_dropped")
 		if self.arch == "solaris":
+			if self.debug: print "Solaris: kstat -p -c net -n " + self.interface + " | grep drop | awk '{print $2}'"
 			string1 = commands.getstatusoutput("kstat -p -c net -n " + self.interface + " | grep drop | awk '{print $2}'")
 
 		drops = 0
@@ -114,22 +139,30 @@ class NetworkBandwidth(Command):
 
 	def run(self):
 		if self.arch == "linux":
+			if self.debug: print "cat /sys/class/net/" + self.interface + "/statistics/rx_bytes"
 			string0 = commands.getstatusoutput("cat /sys/class/net/" + self.interface + "/statistics/rx_bytes")
+			if self.debug: print "cat /sys/class/net/" + self.interface + "/statistics/tx_bytes"
 			string1 = commands.getstatusoutput("cat /sys/class/net/" + self.interface + "/statistics/tx_bytes")
+			if self.debug: print "cat /sys/class/net/" + self.interface + "/statistics/rx_packets"
 			string2 = commands.getstatusoutput("cat /sys/class/net/" + self.interface + "/statistics/rx_packets")
+			if self.debug: print "cat /sys/class/net/" + self.interface + "/statistics/tx_packets"
 			string3 = commands.getstatusoutput("cat /sys/class/net/" + self.interface + "/statistics/tx_packets")
 
 		if self.arch == "solaris":
+			if self.debug: print "Solaris: kstat -p -c net -n " + self.interface + " -s rbytes64 | awk '{ print $2 }'"
 			string0 = commands.getstatusoutput("kstat -p -c net -n " + self.interface + " -s rbytes64 | awk '{ print $2 }'")
+			if self.debug: print "Solaris: kstat -p -c net -n " + self.interface + " -s obytes64 | awk '{ print $2 }'"
 			string1 = commands.getstatusoutput("kstat -p -c net -n " + self.interface + " -s obytes64 | awk '{ print $2 }'")
+			if self.debug: print "Solaris: kstat -p -c net -n " + self.interface + " -s ipackets64 | awk '{ print $2 }'"
 			string2 = commands.getstatusoutput("kstat -p -c net -n " + self.interface + " -s ipackets64 | awk '{ print $2 }'")
+			if self.debug: print "Solaris: kstat -p -c net -n " + self.interface + " -s opackets64 | awk '{ print $2 }'"
 			string3 = commands.getstatusoutput("kstat -p -c net -n " + self.interface + " -s opackets64 | awk '{ print $2 }'")
 
 		return [
-			DataPoint("Network", self.interface, "BytesIn", string0[1]),
-			DataPoint("Network", self.interface, "BytesOut", string1[1]),
-			DataPoint("Network", self.interface, "PacketsIn", string2[1]),
-			DataPoint("Network", self.interface, "PacketsOut", string3[1])
+			DataPoint("Network", self.interface, "BytesIn", int(string0[1])),
+			DataPoint("Network", self.interface, "BytesOut", int(string1[1])),
+			DataPoint("Network", self.interface, "PacketsIn", int(string2[1])),
+			DataPoint("Network", self.interface, "PacketsOut", int(string3[1]))
 		]
 
 # This class is used to retrieve the system load from the
@@ -141,6 +174,7 @@ class SystemLoad(Command):
 		Command.__init__(self, arch, freq)
 
 	def run(self):
+		if self.debug: print "uptime"
 		string = commands.getstatusoutput("uptime")
 		m = re.search('(\d+\.\d+).*(\d+\.\d+).*(\d+\.\d+)', string[1])
 		return [
@@ -157,6 +191,7 @@ class SystemUptime(Command):
 		Command.__init__(self, arch, freq)
 
 	def run(self):
+		if self.debug: print "uptime"
 		string = commands.getstatusoutput("uptime")
 		m = re.search('(\d+) day[^\d]+(\d+:?\d+)', string[1])
 		return [DataPoint("System", "Uptime", "Uptime", m.group(1) + ":" + m.group(2))]
@@ -169,6 +204,7 @@ class SystemUsers(Command):
 		Command.__init__(self, arch, freq)
 
 	def run(self):
+		if self.debug: print "uptime"
 		string = commands.getstatusoutput("uptime")
 		m = re.search('(\d+) user', string[1])
 		return [DataPoint("System", "Users", "Users", m.group(1))]
@@ -182,12 +218,14 @@ class MemoryRam(Command):
 
 	def run(self):
 		if self.arch == "linux":
+			if self.debug: print "Linux: free | tail -2 | head -1 | awk '{ print $3\":\"$4; }'"
 			string = commands.getstatusoutput("free | tail -2 | head -1 | awk '{ print $3\":\"$4; }'")
 			columns = string[1].split(":")
 			used = columns[0]
 			free = columns[1]
 			total = int(columns[0]) + int(columns[1])
 		if self.arch == "solaris":
+			if self.debug: print "Solaris: swap -s"
 			string = commands.getstatusoutput("swap -s")
 			m = re.search('(\d+)k bytes allocated \+ (\d+)k reserved = (\d+)k used, (\d+)k available', string[1])
 			used = int(m.group(3))
@@ -208,12 +246,14 @@ class MemorySwap(Command):
 
 	def run(self):
 		if self.arch == "linux":
+			if self.debug: print "Linux: free | tail -1 | awk '{ print $2\":\"$3\":\"$4; }'"
 			string = commands.getstatusoutput("free | tail -1 | awk '{ print $2\":\"$3\":\"$4; }'")
 			columns = string[1].split(":")
 			used = columns[1]
 			free = columns[2]
 			total = int(columns[1]) + int(columns[2])
 		if self.arch == "solaris":
+			if self.debug: print "Linux: swap -l | tail -1 | awk '{print $4\":\"$5}'"
 			string = commands.getstatusoutput("swap -l | tail -1 | awk '{print $4\":\"$5}'")
 			columns = string[1].split(":")
 			used = int(columns[0]) - int(columns[1])

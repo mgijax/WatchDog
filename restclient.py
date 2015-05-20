@@ -9,7 +9,9 @@ class RestClient:
 	def __init__(self, config):
 		self.restserver = config['collector_server_name']
 		self.restport = config['collector_server_port']
+		self.debug = config['debug']
 		self.baseurl = "/rest"
+		if self.debug: print "Setting up RestClient with url: %s" % "http://" + self.restserver + ":" + self.restport + self.baseurl
 
 	def senddatapoint(self, json_string):
 		try:
