@@ -39,3 +39,11 @@ Once configured run the main.py script
 
 There will be no output and this stays in the foreground, it is suggested to run this via screen or ./main.py & and then log out. There is nothing that is checking the status of the main.py however when viewing the graphs it will be clearly seen which clients are not updating.
 
+## Debugging
+
+If there is errors the script can be run in debug mode which will output a lot of messsage. To run the script in debug mode:
+
+```
+> ./main.py -d
+```
+
