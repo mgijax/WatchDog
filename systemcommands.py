@@ -26,7 +26,7 @@ class Command:
 				if self.debug: print "Finished running " + self.__class__.__name__ + " Command"
 				if self.debug: print
 				return ret
-			except Exception as e:
+			except Exception, e:
 				if self.debug: print "Error: " + str(e)
 				if self.debug: print "Finished running " + self.__class__.__name__ + " Command"
 				if self.debug: print

@@ -24,7 +24,7 @@ if __name__ == '__main__':
 	try:
 		if debug: print "Loading config file: host_setup.cfg"
 		config.readfp(open('host_setup.cfg'))
-	except Exception as e:
+	except Exception, e:
 		if debug: print "Error: Reading config file host_setup.cfg: " + e.strerror
 		if debug: print "Consider copying host_setup_default.cfg to host_setup.cfg"
 		sys.exit("Error: Config file could not be found")
