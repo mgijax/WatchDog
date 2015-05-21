@@ -41,7 +41,7 @@ There will be no output and this stays in the foreground, it is suggested to run
 
 ## Debugging
 
-If there is errors the script can be run in debug mode which will output a lot of messsage. To run the script in debug mode:
+If there is errors or it does not appear to be working, the script can be run in debug mode which will output a lot of messsages. To run the script in debug mode:
 
 ```
 > ./main.py -d
