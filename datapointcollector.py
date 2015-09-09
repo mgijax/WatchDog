@@ -62,4 +62,3 @@ class DataPointCollector:
 
 		if self.debug: print 
 		return dataPointObjects
-
