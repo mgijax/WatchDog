@@ -1,4 +1,13 @@
-import SystemCommands.system_load as SystemLoad
+from systemcommands.systemload import SystemLoad
+from systemcommands.systemuptime import SystemUptime
+from systemcommands.systeminfo import SystemInfo
+from systemcommands.systemusers import SystemUsers
+from systemcommands.memoryram import MemoryRam
+from systemcommands.memoryswap import MemorySwap
+from systemcommands.diskspeed import DiskSpeed
+from systemcommands.disksize import DiskSize
+from systemcommands.networkerrors import NetworkErrors
+from systemcommands.networkbandwidth import NetworkBandwidth
 
 # This class reads in the config file and setups all the classes
 # that are going to run based on what is found in the config file

@@ -11,6 +11,7 @@ class Command:
 			self.freq = int(freq)
 		except:
 			self.freq = 60
+		print freq
 
 	def setDebug(self, debug):
 		self.debug = debug
@@ -31,7 +32,7 @@ class Command:
 				if self.debug: print
 				return []
 		else:
-			if self.debug: print self.__class__.__name__ + " is sleeping for " + str(int(60 - (time.time() - self.lastRuntime))) + " more seconds"
+			if self.debug: print self.__class__.__name__ + " is sleeping for " + str(int(self.freq - (time.time() - self.lastRuntime))) + " more seconds"
 			return []
 
 	def run(self):
