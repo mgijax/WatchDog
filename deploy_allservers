@@ -1,0 +1,18 @@
+git archive --prefix=WatchDog/ -o WatchDog.tar.gz master
+
+scp WatchDog.tar.gz mgiadmin@cardolan.informatics.jax.org:/usr/local/mgi
+scp WatchDog.tar.gz mgiadmin@valinor.informatics.jax.org:/usr/local/mgi
+scp WatchDog.tar.gz mgiadmin@rohan.informatics.jax.org:/usr/local/mgi
+scp WatchDog.tar.gz mgiadmin@mtdoom.informatics.jax.org:/usr/local/mgi
+scp WatchDog.tar.gz mgiadmin@firien.informatics.jax.org:/usr/local/mgi
+scp WatchDog.tar.gz mgiadmin@bhmgiapt01.jax.org:/usr/local/mgi
+scp WatchDog.tar.gz mgiadmin@lindon.informatics.jax.org:/usr/local/mgi
+scp WatchDog.tar.gz mgiadmin@hobbiton.informatics.jax.org:/usr/local/mgi
+scp WatchDog.tar.gz mgiadmin@falas.informatics.jax.org:/usr/local/mgi
+scp WatchDog.tar.gz mgiadmin@gondor.informatics.jax.org:/usr/local/mgi
+scp WatchDog.tar.gz mgiadmin@buckland.informatics.jax.org:/usr/local/mgi
+scp WatchDog.tar.gz mgiadmin@bhmgibm01.jax.org:/usr/local/mgi
+scp WatchDog.tar.gz mgiadmin@arnor.informatics.jax.org:/usr/local/mgi
+scp WatchDog.tar.gz mgiadmin@emnet.informatics.jax.org:/usr/local/mgi
+
+#bhmgiem01.jax.org

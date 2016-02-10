@@ -1,4 +1,4 @@
-from systemcommands import *
+import SystemCommands.system_load as SystemLoad
 
 # This class reads in the config file and setups all the classes
 # that are going to run based on what is found in the config file
@@ -16,6 +16,7 @@ class DataPointCollector:
 		self.classobjects = {
 			'system_load': SystemLoad,
 			'system_uptime': SystemUptime,
+			'system_info': SystemInfo,
 			'system_users': SystemUsers,
 			'memory_ram': MemoryRam,
 			'memory_swap': MemorySwap,
