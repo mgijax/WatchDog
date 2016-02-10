@@ -9,6 +9,7 @@ class SystemInfo(Command):
 		Command.__init__(self, arch, freq)
 
 	def run(self):
-		return []
-
+		return [
+			DataPoint("System", "Info", "Packages", "Blah Blah")
+		]
 
