@@ -11,7 +11,6 @@ class Command:
 			self.freq = int(freq)
 		except:
 			self.freq = 60
-		print freq
 
 	def setDebug(self, debug):
 		self.debug = debug
