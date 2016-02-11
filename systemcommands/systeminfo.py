@@ -15,6 +15,8 @@ class SystemInfo(Command):
 		self.recurse("/usr/local/mgi/live", list)
 		for d in list:
 			if not os.path.islink(d):
+				if self.debug:
+					print d
 				if os.path.isfile(d + "/CVS/Tag"):
 					tagfile = open(d + "/CVS/Tag", "r")
 					tag = tagfile.readline()[:-1][1:]
@@ -42,6 +44,8 @@ class SystemInfo(Command):
 					if product not in packages:
 						packages[product] = []
 					packages[product].append(tag)
+				if self.debug:
+					print product + " -- " + tag
 
 		return [
 			DataPoint("System", "Info", "Packages", packages)
