@@ -1,6 +1,7 @@
 #!/usr/local/bin/python
 
 import ConfigParser, os, sys
+from config_helper import *
 from restclient import *
 from datapointcollector import DataPointCollector
 import time
@@ -19,39 +20,16 @@ if __name__ == '__main__':
 		if sys.argv[1] == '-d':
 			debug = True
 
-	config = ConfigParser.ConfigParser()
+	confighelper = ConfigHelper(debug)
 
-	try:
-		if debug: print "Loading config file: host_setup.cfg"
-		config.readfp(open('host_setup.cfg'))
-	except Exception, e:
-		if debug: print "Error: Reading config file host_setup.cfg: " + e.strerror
-		if debug: print "Consider copying host_setup_default.cfg to host_setup.cfg"
-		sys.exit("Error: Config file could not be found")
-
-	dictionary = {}
-
-	for section in config.sections():
-		dictionary[section] = {}
-		for option in config.options(section):
-			dictionary[section][option] = config.get(section, option)
-
-	if debug: print "Finished loading config file into directory"
-
-	cfg = dictionary['config']
-
-	if not "config" in cfg:
-		cfg['debug'] = debug
-
-	if debug:
-		cfg['debug'] = debug
-
-	restclient = RestClient(cfg)
-	collector = DataPointCollector(cfg)
+	restclient = RestClient(confighelper.getconfig())
+	confighelper.setserverconfig(restclient.registerserver())
+	collector = DataPointCollector(confighelper.getconfig())
 
 	while True:
 		if debug: print "Running commands: "
 		points = collector.runCommands()
 		for point in points:
-			restclient.senddatapoint(point.json())
+			#restclient.senddatapoint(point.json())
+			pass
 		time.sleep(1)
