@@ -1,5 +1,4 @@
 from datapoint import *
-import commands
 import time
 
 class Command:

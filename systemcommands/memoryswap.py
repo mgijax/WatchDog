@@ -1,3 +1,4 @@
+import commands
 from datapoint import *
 from command import Command
 
