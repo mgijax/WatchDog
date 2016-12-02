@@ -69,6 +69,7 @@ class SystemInfo(Command):
 					list.append(dir + "/" + d)
 				else:
 					if os.path.isdir(newpath) and d != '.snapshot' and not os.path.islink(newpath):
-						print newpath
+						if self.debug:
+							print newpath
 						self.recurse(newpath, list)
 
