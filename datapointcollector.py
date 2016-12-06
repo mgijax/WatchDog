@@ -48,15 +48,15 @@ class DataPointCollector:
 	def setupCollectionTypes(self, typeList):
 		for collectionType in typeList:
 			for collectionName in collectionType["names"]:
-
 				if len(collectionName["properties"]) > 0:
 					for collectionProperty in collectionName["properties"]:
-						if self.debug: print "Setting up class collector for: %s" % (collectionType["type"] + "[" + collectionName["name"] + "][" + collectionProperty["property"] + "] -> " + self.classobjects[collectionType["type"]][collectionName["name"]].__name__)
-						self.list.append(self.classobjects[collectionType["type"]][collectionName["name"]](self.arch, collectionName["frequency"], collectionProperty["property"]))
-						pass
+						if collectionType["type"] in self.classobjects and collectionName["name"] in self.classobjects[collectionType["type"]]:
+							if self.debug: print "Setting up class collector for: %s" % (collectionType["type"] + "[" + collectionName["name"] + "][" + collectionProperty["property"] + "] -> " + self.classobjects[collectionType["type"]][collectionName["name"]].__name__)
+							self.list.append(self.classobjects[collectionType["type"]][collectionName["name"]](self.arch, collectionName["frequency"], collectionProperty["property"]))
 				else:
-					if self.debug: print "Setting up class collector for: %s" % (collectionType["type"] + "[" + collectionName["name"] + "] -> " + self.classobjects[collectionType["type"]][collectionName["name"]].__name__)
-					self.list.append(self.classobjects[collectionType["type"]][collectionName["name"]](self.arch, collectionName["frequency"]))
+					if collectionType["type"] in self.classobjects and collectionName["name"] in self.classobjects[collectionType["type"]]:
+						if self.debug: print "Setting up class collector for: %s" % (collectionType["type"] + "[" + collectionName["name"] + "] -> " + self.classobjects[collectionType["type"]][collectionName["name"]].__name__)
+						self.list.append(self.classobjects[collectionType["type"]][collectionName["name"]](self.arch, collectionName["frequency"]))
 
 	def runCommands(self):
 		dataPointObjects = []
