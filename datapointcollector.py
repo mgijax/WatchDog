@@ -17,47 +17,46 @@ class DataPointCollector:
 
 	def __init__(self, config):
 		self.list = []
-		self.serverName = config['client_name']
-		self.arch = config['client_arch']
+		self.serverName = config['clientname']
+		self.arch = config['clientarch']
 		self.config = config
-		self.debug = config['debug']
+		self.debug = bool(config['debug'])
+
 		if self.debug: print "Setting up DataPointCollector for: " + self.serverName + " on: " + self.arch
 		self.classobjects = {
-			'system_load': SystemLoad,
-			'system_uptime': SystemUptime,
-			'system_info': SystemInfo,
-			'system_users': SystemUsers,
-			'memory_ram': MemoryRam,
-			'memory_swap': MemorySwap,
-			'disk_speed': DiskSpeed,
-			'disk_size': DiskSize,
-			'network_errors': NetworkErrors,
-			'network_bandwidth': NetworkBandwidth
+			"System": {
+				"Load": SystemLoad,
+				"Uptime": SystemUptime,
+				"Info": SystemInfo,
+				"Users": SystemUptime,
+			},
+			"Memory": {
+				"Ram": MemoryRam,
+				"Swap": MemorySwap
+			},
+			"Disk": {
+				"Speed": DiskSpeed,
+				"Size": DiskSize,
+			},
+			"Network": {
+				"Errors": NetworkErrors,
+				"Bandwidth": NetworkBandwidth
+			}
 		}
-		self.setupCollectionTypes(self.config['collection_types'].split(','))
+		self.setupCollectionTypes(self.config['types'])
 
 	def setupCollectionTypes(self, typeList):
 		for collectionType in typeList:
-			if(collectionType== "system"):
-				for systemType in self.config['system_types'].split(','):
-					if self.debug: print "Setting up class collector for: %s" % (systemType + " -> " + self.classobjects[systemType].__name__)
-					self.list.append(self.classobjects[systemType](self.arch, self.config[systemType + "_freq"]))
-			elif(collectionType == "memory"):
-				for memoryType in self.config['memory_types'].split(','):
-					if self.debug: print "Setting up class collector for: %s" % (memoryType + " -> " + self.classobjects[memoryType].__name__)
-					self.list.append(self.classobjects[memoryType](self.arch, self.config[memoryType + "_freq"]))
-			elif(collectionType == "disk"):
-				for diskType in self.config['disk_types'].split(','):
-					for volume in self.config['disk_volumes'].split(','):
-						if self.debug: print "Setting up class collector for: %s" % (diskType + " -> " + self.classobjects[diskType].__name__)
-						self.list.append(self.classobjects[diskType](self.arch, self.config[diskType + "_freq"], volume))
-			elif(collectionType == "network"):
-				for networkType in self.config['network_types'].split(','):
-					for interface in self.config['network_interfaces'].split(','):
-						if self.debug: print "Setting up class collector for: %s" % (networkType + " -> " + self.classobjects[networkType].__name__)
-						self.list.append(self.classobjects[networkType](self.arch, self.config[networkType + "_freq"], interface))
-			else:
-				if self.debug: print "Unknown Collection Type: %s" % collectionType
+			for collectionName in collectionType["names"]:
+
+				if len(collectionName["properties"]) > 0:
+					for collectionProperty in collectionName["properties"]:
+						if self.debug: print "Setting up class collector for: %s" % (collectionType["type"] + "[" + collectionName["name"] + "][" + collectionProperty["property"] + "] -> " + self.classobjects[collectionType["type"]][collectionName["name"]].__name__)
+						self.list.append(self.classobjects[collectionType["type"]][collectionName["name"]](self.arch, collectionName["frequency"], collectionProperty["property"]))
+						pass
+				else:
+					if self.debug: print "Setting up class collector for: %s" % (collectionType["type"] + "[" + collectionName["name"] + "] -> " + self.classobjects[collectionType["type"]][collectionName["name"]].__name__)
+					self.list.append(self.classobjects[collectionType["type"]][collectionName["name"]](self.arch, collectionName["frequency"]))
 
 	def runCommands(self):
 		dataPointObjects = []
@@ -66,9 +65,10 @@ class DataPointCollector:
 			dataPointObjects.extend(command.runCommand())
 		
 		if self.debug: print "Collected Data Points: "
+
 		for dp in dataPointObjects:
 			dp.server_name = self.serverName
 			if self.debug: print dp
 
-		if self.debug: print 
+		if self.debug: print dataPointObjects
 		return dataPointObjects

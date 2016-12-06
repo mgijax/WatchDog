@@ -25,15 +25,16 @@ class ConfigHelper:
 
 		self.cfg = dictionary['config']
 
-		if not "config" in self.cfg:
+		if "debug" not in self.cfg:
 			self.cfg['debug'] = debug
 
 		if debug:
 			self.cfg['debug'] = debug
 
+		self.cfg['debug'] = (self.cfg['debug'] == True or self.cfg['debug'] == "True")
+
 	def setserverconfig(self, serverconfig):
-		print serverconfig
-		pass
+		self.cfg["types"] = serverconfig["types"]
 
 	def getconfig(self):
 		return self.cfg

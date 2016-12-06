@@ -30,6 +30,6 @@ if __name__ == '__main__':
 		if debug: print "Running commands: "
 		points = collector.runCommands()
 		for point in points:
-			#restclient.senddatapoint(point.json())
+			restclient.senddatapoint(point.json())
 			pass
 		time.sleep(1)
